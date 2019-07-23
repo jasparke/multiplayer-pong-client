@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './icon.png';
-import './App.css';
+import React from "react"
+
+import './scss/bootstrap.css'
+
+import ReactDOM from 'react-dom'
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import Homepage from "./components/Homepage"
+import Game2 from './components/Game2'
+import TicTacToe from './components/TicTacToe';
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      <Router>
+        <div className="nav">
+          <Link to="/">Home</Link>
+          <Link to="/Tictactoe">TicTacToe</Link>
+          <Link to="/Game2">Game2</Link>
+        </div>
+        <div className="App">
+          <Route exact path="/" component={Homepage}/>
+          <Route path="/Game1" component={TicTacToe}/>
+          <Route path="/Game2" component={Game2}/>
+        </div>
+      </Router>
+    );
 }
 
 export default App;

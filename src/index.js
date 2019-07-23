@@ -1,4 +1,4 @@
-import 'bootstrap/dist/css/boostrap.min.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 

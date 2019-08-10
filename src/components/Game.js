@@ -27,7 +27,7 @@ export default class Game extends Component {
         const user = {
             name: this.state.username
         }
-
+        axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
         axios.put(APIUrl, {user})
             .then(res => {
                 //handle the responseeeeee

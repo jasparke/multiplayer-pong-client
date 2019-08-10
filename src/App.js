@@ -5,8 +5,9 @@ import './scss/bootstrap.css'
 import ReactDOM from 'react-dom'
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 import Homepage from "./components/Homepage"
-import Game2 from './components/Game2'
-import TicTacToe from './components/TicTacToe';
+import Pong from './components/Pong'
+import TicTacToe from './components/TicTacToe'
+import './scss/TicTacToe.css'
 
 
 
@@ -16,12 +17,12 @@ function App() {
         <div className="nav">
           <Link to="/">Home</Link>
           <Link to="/Tictactoe">TicTacToe</Link>
-          <Link to="/Game2">Game2</Link>
+          <Link to="/Pong">Ping Pong</Link>
         </div>
         <div className="App">
           <Route exact path="/" component={Homepage}/>
-          <Route path="/Game1" component={TicTacToe}/>
-          <Route path="/Game2" component={Game2}/>
+          <Route path="/Tictactoe" component={TicTacToe}/>
+          <Route path="/Pong" component={Pong}/>
         </div>
       </Router>
     );

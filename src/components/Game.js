@@ -9,7 +9,9 @@ function uuidv4() {
     })
 }
 
-const APIUrl = 'http://rps-462.herokuapp.com/games'
+const MMAPIUrl = 'http://rps-462.herokuapp.com/games'
+const SDAPIUrl = 'SDAPI'
+const DEVSERVER = 'http://127.0.0.1:4001'
 
 export default class Game extends Component {
     constructor(props) {
@@ -17,7 +19,8 @@ export default class Game extends Component {
         this.state = {
             server: false,
             username: "",
-            uid: uuidv4()
+            uid: uuidv4(),
+            showAlert: false
         };
     }
 
@@ -27,41 +30,64 @@ export default class Game extends Component {
         const user = {
             name: this.state.username
         }
-        axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
-        axios.put(APIUrl, {user})
-            .then(res => {
-                //handle the responseeeeee
-                console.log(res)
-                console.log(res.data)
-                
-            })
+        this.setState({server: DEVSERVER})
+        // axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+        // axios.put(MMAPIUrl, {user})
+        //     .then(res => {
+        //             axios.get(SDAPIUrl, {timeout: 180000})
+        //                 .then(sdres => {
+
+        //                 })
+
+        //     })
+        //     .catch(err => {
+        //         this.setState({showAlert: true})
+        //     })
     }
+
+    // Client:
+    // http.put(MMAPIUrl, {user}).then(res => {
+    //     if (res.status == 200) {
+    //         http.get(ServDetAPIURL, {user}).then(res => {
+    //             if (res.status == 200) {
+    //                 this.setState({server: res.data.server})
+    //             }
+    //         })
+    //     }
+    // })
     
     handleChange = event => {
         this.setState({username: event.target.value})
     }
 
+    handleEndGame = event => {
+        this.setState({server:false})
+    }
+
     render() {
-        const { server, username, uid } = this.state
+        const { server, username, uid, handleEndGame, showAlert } = this.state
         if (server) {
             return (
                 <div className="container">
                     <div className="row">
-                        <Pong uid={uid} playername={username} endpoint={server} />
+                        <Pong uid={uid} playername={username} endpoint={server} gameover={this.handleEndGame}/>
                     </div>
                 </div>
             );
         } else {
             return (
                 <div className="container">
+                {(showAlert) ? <div class="alert alert-danger alert-dismissable" role="alert">
+                    "There was a problem connecting to the server :("
+                </div> : ""}
                     <div className="row">
                         <div className="form_bg">
                             <form onSubmit={this.handleSubmit}>
                                 <div className="form-group">
-                                    <label for="playername">Playername</label><br />
+                                    <label htmlFor="playername">Playername</label><br />
                                     <input type="text" placeholder="Enter a playername" onChange={this.handleChange}/>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Let's Play!</button>
+                                <button type="submit" className="btn btn-primary">Let's Play!</button>
                             </form>
                         </div>
                     </div>

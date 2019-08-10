@@ -15,8 +15,9 @@ function drawBall(ctx, ball) {
     ctx.fill();
 }
 
-
 export default class Pong extends Component {
+    gameLoop = false;
+    socket = false;
 
     constructor(props) {
         super(props)
@@ -27,51 +28,52 @@ export default class Pong extends Component {
             score: 0,
         }
 
-        this.player = {
-            id: this.state.id,
-            left: false,
-            right: false
-        }
         this.socket = socketIOClient(this.props.endpoint)
     }
     
     componentDidMount() {
         const { socket } = this
-        socket.emit('PlayerReady', this.props.uid)
+        socket.emit('PlayerReady', {id: this.props.uid, name: this.props.playername})
 
         socket.on("Update", data => {
             this.setState({data})
             this.updateCanvas();
         })
 
+        socket.on("GameOver", data => {
+            this.props.gameover(data.winner)
+            console.log(data.winner)
+            clearInterval(this.gameLoop)
+        })
+
         window.addEventListener('keydown', this.keyHandlerDown)
         window.addEventListener('keyup', this.keyHandlerUp)
 
-        setInterval(() => {
+        this.gameLoop = setInterval(() => {
             socket.emit('PlayerMove', {id: this.props.uid, left: this.state.left, right: this.state.right});
         }, 1000/60);
     }
 
     componentWillUnmount() {
+        clearInterval(this.gameLoop)
+        window.removeEventListener('keydown', this.keyHandlerDown)
+        window.removeEventListener('keyup', this.keyHandlerUp)
         this.socket.close()
     }
 
     keyHandlerDown = (e) => {
         if (e.keyCode === 65) {
-            // this.player.left = true
             this.setState({left: true})
         } else if (e.keyCode === 68) {
             this.setState({right: true})
-            // this.player.right = true
         }
     }
+
     keyHandlerUp = (e) => {
         if (e.keyCode === 65) {
-            // this.player.left = false
             this.setState({left: false})
         } else if (e.keyCode === 68) {
             this.setState({right: false})
-            // this.player.right = false
         }
     }
 
@@ -91,7 +93,7 @@ export default class Pong extends Component {
         const id = this.props.uid
         return (
             <div>
-              <div id="status">{data && (data.p1 == id || data.p2 == id) ? 'You are ' + data.players[id].name : 'Waiting to Connect...'}</div>
+              <div id="status">{data && (data.p1 === id || data.p2 === id) ? 'You are ' + data.players[id].name : 'Waiting to Connect...'}</div>
               <canvas ref="canvas" width={this.props.width} height={this.props.height} />
             </div>
         )

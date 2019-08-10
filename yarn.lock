@@ -11232,6 +11232,11 @@ util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
+util-js@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/util-js/-/util-js-1.0.5.tgz#9e45e0d15350ad72d3f196b6badd1b4215a4d329"
+  integrity sha1-nkXg0VNQrXLT8Za2ut0bQhWk0yk=
+
 util.promisify@1.0.0, util.promisify@^1.0.0, util.promisify@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/util.promisify/-/util.promisify-1.0.0.tgz#440f7165a459c9a16dc145eb8e72f35687097030"

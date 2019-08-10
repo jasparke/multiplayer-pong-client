@@ -30,19 +30,19 @@ export default class Game extends Component {
         const user = {
             name: this.state.username
         }
-        this.setState({server: DEVSERVER})
-        // axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
-        // axios.put(MMAPIUrl, {user})
-        //     .then(res => {
-        //             axios.get(SDAPIUrl, {timeout: 180000})
-        //                 .then(sdres => {
 
-        //                 })
+        axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+        axios.put(MMAPIUrl, {user})
+            .then(res => {
+                    // axios.get(SDAPIUrl, {timeout: 180000})
+                    //     .then(sdres => {
 
-        //     })
-        //     .catch(err => {
-        //         this.setState({showAlert: true})
-        //     })
+                    //     })
+                    this.setState({server: DEVSERVER})
+            })
+            .catch(err => {
+                this.setState({showAlert: true})
+            })
     }
 
     // Client:

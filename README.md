@@ -15,5 +15,3 @@ Or to package the application:
 yarn install
 yarn run electron-pack
 ```
-
-This will package the application in the `dist` folder.

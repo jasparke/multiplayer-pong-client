@@ -10,7 +10,7 @@ function uuidv4() {
 }
 
 const MMAPIUrl = 'http://rps-462.herokuapp.com/games'
-const SDAPIUrl = 'SDAPI'
+const SDAPIUrl = 'https://csc462-mmaas.herokuapp.com/server/'
 const DEVSERVER = 'http://127.0.0.1:4001'
 
 export default class Game extends Component {
@@ -28,33 +28,35 @@ export default class Game extends Component {
         event.preventDefault()
 
         const user = {
-            name: this.state.username
+            name: this.state.uid
         }
 
         axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+        let retries = 0
         axios.put(MMAPIUrl, {user})
             .then(res => {
-                    // axios.get(SDAPIUrl, {timeout: 180000})
-                    //     .then(sdres => {
-
-                    //     })
-                    this.setState({server: DEVSERVER})
+                let loop = setInterval(() => {
+                    axios.get(SDAPIUrl+this.state.uid)
+                        .then((response) => {
+                            console.log(response)
+                            if (response == null)
+                            this.setState({server: response.serverInfo})
+                            clearInterval(loop)
+                        }).catch((error) => {
+                            console.log("Didn't find it.", ++retries)
+                            console.log(error.response)
+                            if (retries > 3) {
+                                console.log('forcing devserver after', retries)
+                                this.setState({server: DEVSERVER})
+                                clearInterval(loop)
+                            }
+                        })
+                }, 5000)
             })
             .catch(err => {
                 this.setState({showAlert: true})
             })
     }
-
-    // Client:
-    // http.put(MMAPIUrl, {user}).then(res => {
-    //     if (res.status == 200) {
-    //         http.get(ServDetAPIURL, {user}).then(res => {
-    //             if (res.status == 200) {
-    //                 this.setState({server: res.data.server})
-    //             }
-    //         })
-    //     }
-    // })
     
     handleChange = event => {
         this.setState({username: event.target.value})
@@ -65,7 +67,7 @@ export default class Game extends Component {
     }
 
     render() {
-        const { server, username, uid, handleEndGame, showAlert } = this.state
+        const { server, username, uid, showAlert } = this.state
         if (server) {
             return (
                 <div className="container">
@@ -77,7 +79,7 @@ export default class Game extends Component {
         } else {
             return (
                 <div className="container">
-                {(showAlert) ? <div class="alert alert-danger alert-dismissable" role="alert">
+                {(showAlert) ? <div className="alert alert-danger alert-dismissable" role="alert">
                     "There was a problem connecting to the server :("
                 </div> : ""}
                     <div className="row">
